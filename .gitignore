@@ -3,3 +3,6 @@
 /target
 /bin
 *.iml
+.project
+bin
+pkg
