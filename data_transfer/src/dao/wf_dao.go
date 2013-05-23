@@ -1,51 +1,64 @@
-/**
- * Created with IntelliJ IDEA.
- * User: luoquan
- * Date: 13-5-20
- * Time: 下午11:52
- * To change this template use File | Settings | File Templates.
- */
 package dao
 
 import (
 	"fmt"
-	"time"
+	"database/sql"
+	"strconv"
 )
 
-//select id,version,type,title,organization_full_name,status,has_opinion,create_time
-// from common_workflow_task where id<10;
+func WriteRecords(db *sql.DB, arr []*Wf) {
+	if arr == nil || len(arr) == 0 {
+		return
+	}
 
-var queue chan Wf = make(chan Wf, 1000)
+	sql := "insert into wf values(?,?,?,?,?,?)"
 
-type Wf struct {
-	Id         int64
-	Version    int
-	Type       int
-	Title      string
-	Org_name   string
-	Status     string
-	HasOpinion bool
-	CreateTime time.Time
+	if stat, err := db.Prepare(sql); err == nil {
+		for _, val := range arr {
+			//fmt.Println(val.Title, val.Org_name, val.Status)
+			if _, err2 := stat.Exec(val.Id, val.Version, val.Type, val.Title, val.Org_name, val.Status); err2 == nil {
+//				rowsAffected, _ := re.RowsAffected()
+//				lastInsertId, _ := re.LastInsertId()
+				//fmt.Println("rows_affected:", rowsAffected , "last_insert_id:", lastInsertId)
+			}else {
+				fmt.Println("error occured when insert", err2)
+			}
+		}
+		defer stat.Close();
+	}   else {
+		fmt.Println("error occured when prepare", err)
+	}
 }
 
-func ReadRecords(start, offset int) (result []Wf) {
-	sql := `select id,version,type,title,organization_full_name,status,has_opinion,create_time
+func ReadRecords(db *sql.DB, start, offset int) (result []*Wf) {
+	sql := `select id,version,type,title,organization_full_name,status
 	from common_workflow_task order by id asc limit ?,?`
 
-	db := GetRDb()
-
-	if stat, err := db.Prepare(sql); err != nil {
-		if rows, err2 := stat.Query(start, offset); err2 != nil {
+	fmt.Println("query data start:", strconv.Itoa(start), " offset:", strconv.Itoa(offset))
+	if stat, err := db.Prepare(sql); err == nil {
+		if rows, err2 := stat.Query(start, offset); err2 == nil {
 			for rows.Next() {
-				wf := &Wf{}
-				rows.Scan(wf.Id, wf.Version, wf.Type, wf.Title, wf.Org_name, wf.HasOpinion, wf.CreateTime)
-				result = append(result, *wf)
+				var id, version, ty int
+				var title, org, status string
+				rows.Scan(&id, &version, &ty, &title, &org, &status)
+				//fmt.Println(id, version, ty, title, org, status)
+
+				wf := new(Wf)
+				wf.Id = id
+				wf.Version = version
+				wf.Type = ty
+				wf.Title = title
+				wf.Org_name = org
+				wf.Status = status
+				result = append(result, wf)
 			}
+			defer rows.Close()
 		} else {
-			fmt.Println("error occured when query")
+			fmt.Println("error occured when query", err2)
 		}
+		defer stat.Close()
 	} else {
-		fmt.Println("error occured when prepare")
+		fmt.Println("error occured when prepare", err)
 	}
 	return result
 }

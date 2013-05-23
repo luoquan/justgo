@@ -1,27 +1,27 @@
-/**
- * Created with IntelliJ IDEA.
- * User: luoquan
- * Date: 13-5-21
- * Time: 下午8:14
- * To change this template use File | Settings | File Templates.
- */
 package dao
 
 import (
 	"testing"
 	"strconv"
-	"fmt"
 )
 
 func TestRead(t *testing.T) {
-	var count int = 10
-	arr := ReadRecords(0, count)
-	t.Errorf(strconv.Itoa(len(arr)))
-	if false {
-		t.Errorf("result size not right")
-	} else {
-		for _, val := range arr {
-			fmt.Println(val.Id, val.Title)
-		}
+	var count int = 1
+	arr := ReadRecords(GetRDb(), 0, count)
+	if len(arr) != count {
+		t.Errorf("result size not right:",strconv.Itoa(len(arr)))
 	}
+}
+
+func TestWrite(t *testing.T) {
+	wf := new(Wf)
+	wf.Version = 2
+	wf.Type = 3
+	wf.Title = "HR"
+	wf.Org_name = "北京"
+	wf.Status = "complete"
+	var arr []*Wf
+	arr = append(arr, wf)
+
+	WriteRecords(GetWDb(), arr)
 }

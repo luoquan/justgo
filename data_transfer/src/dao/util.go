@@ -1,16 +1,24 @@
-/**
- * Created with IntelliJ IDEA.
- * User: luoquan
- * Date: 13-5-21
- * Time: 上午12:01
- * To change this template use File | Settings | File Templates.
- */
 package dao
 
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"strconv"
 )
+
+type Wf struct {
+	Id       int
+	Version  int
+	Type     int
+	Title    string
+	Org_name string
+	Status   string
+}
+
+func (wf Wf) String() string {
+	return strconv.Itoa(wf.Id) + "-" + strconv.Itoa(wf.Version) + "-" + strconv.Itoa(wf.Type) +
+		"-" + wf.Title + "-" + wf.Org_name + "-" + wf.Status
+}
 
 func getDb(dbName string) *sql.DB {
 	db, err := sql.Open("mysql", "root:luoquan@tcp(localhost:3306)/"+dbName+"?charset=utf8")

@@ -1,10 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: luoquan
- * Date: 13-5-21
- * Time: 下午7:42
- * To change this template use File | Settings | File Templates.
- */
 package dao
 
 import (
