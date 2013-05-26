@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"dao"
+	"data_transfer/dao"
 	"runtime"
 )
 
