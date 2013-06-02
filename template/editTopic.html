@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{.topic.Title}}</title>
+</head>
+<body>
+{{.message}}
+<form action="{{.action}}" method="POST">
+    <input type="hidden" name="Tid" value="{{.topic.Tid}}" />
+     标题：<input type="text" name="Title" value="{{.topic.Title}}" /><br />
+    内容：<input type="text" name="Content" value="{{.topic.Content}}" /><br />
+    节点ID：<input type="text" name="Nid" value="{{.topic.Nid}}" /><br />
+    用户ID：<input type="text" name="Uid" value="{{.topic.Uid}}" /><br />
+    最后回复ID：<input type="text" name="Lastreplyuid" value="{{.topic.Lastreplyuid}}" /><br />
+    最后回复时间：<input type="text" name="Lastreplytime" value="{{.topic.Lastreplytime}}" /><br />
+    标志：<input type="text" name="Flag" value="{{.topic.Flag}}" /><br />
+    创建时间：<input type="text" name="Ctime" value="{{.topic.Ctime}}" /><br />
+    修改时间：<input type="text" name="Mtime" value="{{.topic.Mtime}}" /><br />
+    <input type="submit"  value="提交" /><br />
+    <input type="reset"  value="清空" /><br />
+</form>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>index page</title>
+</head>
+<body>
+{{.message}}
+ <a href="/topics/new">add a new topic</a>
+ {{range .topics}}
+ <li>{{.Tid}} {{.Title}} <a href="/topics/view?id={{.Tid}}">查看</a> <a href="/topics/delete?id={{.Tid}}">删除</a></li>
+ {{end}}
+ <ul>
+
+ </ul>
+</body>
+</html>
